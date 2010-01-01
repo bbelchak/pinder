@@ -1,10 +1,13 @@
 "Room object"
 import datetime
 
+from pinder.connector import HTTPConnector
 
 class Room(object):
-    def __init__(self, campfire, room_id, data):
+    def __init__(self, campfire, room_id, data, connector=HTTPConnector):
         self._campfire = campfire
+        connector = connector or HTTPConnector
+        self._connector = connector
         # The id of the room
         self.id = room_id
         # The raw data of the room
@@ -25,13 +28,13 @@ class Room(object):
         return uri
  
     def _get(self, path='', data=None, headers=None):
-        return self._campfire._get(self._path_for_room(path), data, headers)
+        return self._connector.get(self._path_for_room(path), data, headers)
 
     def _post(self, path, data=None, headers=None):
-        return self._campfire._post(self._path_for_room(path), data, headers)
+        return self._connector.post(self._path_for_room(path), data, headers)
         
     def _put(self, path, data=None, headers=None):
-        return self._campfire._put(self._path_for_room(path), data, headers)
+        return self._connector.put(self._path_for_room(path), data, headers)
 
     def _send(self, message, type_='TextMessage'):
         data = {'message': {'body': message, 'type': type_}}
