@@ -62,10 +62,10 @@ class Room(object):
         return self._campfire.users(self.data['name'])
         
     def transcript(self, date=None):
-        ("Gets the transcript for today or the given date "
-        "(a datetime.date instance).")
+        ("Gets the transcript for the given date "
+        "(a datetime.date instance) or today.")
         self.join()
-        date = datetime.date.today() or date
+        date = date or datetime.date.today()
         transcript_path = "transcript/%s/%s/%s" % (
             date.year, date.month, date.day)
         return self._get(transcript_path)['messages']
