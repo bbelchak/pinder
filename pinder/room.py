@@ -50,7 +50,6 @@ class Room(object):
         
     def lock(self):
         "Locks the room to prevent new users from entering."
-        self.join()
         self._post("lock")
 
     def unlock(self):
@@ -64,7 +63,6 @@ class Room(object):
     def transcript(self, date=None):
         ("Gets the transcript for the given date "
         "(a datetime.date instance) or today.")
-        self.join()
         date = date or datetime.date.today()
         transcript_path = "transcript/%s/%s/%s" % (
             date.year, date.month, date.day)
@@ -72,22 +70,18 @@ class Room(object):
 
     def uploads(self):
         "Lists recently uploaded files."
-        self.join()
         return self._get('uploads')['uploads']
         
     def speak(self, message):
         "Sends a message to the room. Returns the message data."
-        self.join()
         return self._send(message, type_='TextMessage')['message']
 
     def paste(self, message):
         "Pastes a message to the room. Returns the message data."
-        self.join()
         return self._send(message, type_='PasteMessage')['message']
 
     def sound(self, message):
         "Plays a sound into the room. Returns the message data."
-        self.join()
         return self._send(message, type_='SoundMessage')['message']
     
     def update(self, name, topic):
