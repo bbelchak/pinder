@@ -1,2 +1,3 @@
+- Upload object from an upload message
 - room creation (and find_or_create_room_by_name)
 - streaming
