@@ -22,6 +22,11 @@ class Campfire(object):
         "Returns the rooms available in the Campfire account"
         return self._connector.get('rooms')['rooms']
 
+    def joined_rooms(self):
+        "Returns the rooms you've joined"
+        return self._connector.get('presence')['rooms']
+    rooms_joined = joined_rooms
+
     def rooms_names(self):
         "Returns the rooms names available in the Campfire account"
         rooms = self._connector.get('rooms')['rooms']
