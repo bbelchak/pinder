@@ -100,5 +100,5 @@ def encode_file(boundary, key, file_):
             % (smart_str(key), smart_str(os.path.basename(file_.name))),
         'Content-Type: %s' % guess_mime(file_.name),
         '',
-        file.read()
+        file_.read()
     ]

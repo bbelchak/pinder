@@ -93,4 +93,4 @@ class Room(object):
     def upload(self, fileobj):
         "Uploads the content of the given file-like object to the room."
         data = {'upload': fileobj}
-        self._post('uploads', data, file_upload=True)
+        return self._post('uploads', data, file_upload=True)
