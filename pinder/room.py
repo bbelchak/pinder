@@ -69,10 +69,6 @@ class Room(object):
             date.year, date.month, date.day)
         return self._get(transcript_path)['messages']
 
-    def uploads(self):
-        "Lists recently uploaded files."
-        return self._get('uploads')['uploads']
-        
     def speak(self, message):
         "Sends a message to the room. Returns the message data."
         return self._send(message, type_='TextMessage')['message']
@@ -90,7 +86,17 @@ class Room(object):
         data = {'room': {'name': name, 'topic': topic}}
         self._put('', data)
 
+    def uploads(self):
+        "Lists recently uploaded files."
+        return self._get('uploads')['uploads']
+
     def upload(self, fileobj):
         "Uploads the content of the given file-like object to the room."
         data = {'upload': fileobj}
         return self._post('uploads', data, file_upload=True)
+
+    def recent_messages(self, limit=100, since_message_id=None):
+        ("Returns upto limit (max 100) messages optionally "
+        "starting from since_message_id")
+        data = dict(limit=limit, since_message_id=since_message_id)
+        return self._get('recent', data)['messages']
