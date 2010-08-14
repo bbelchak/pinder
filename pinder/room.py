@@ -70,17 +70,21 @@ class Room(object):
         return self._get(transcript_path)['messages']
 
     def speak(self, message):
-        "Sends a message to the room. Returns the message data."
+        "Sends a message to the room. Returns the message content."
         return self._send(message, type_='TextMessage')['message']
 
     def paste(self, message):
-        "Pastes a message to the room. Returns the message data."
+        "Pastes a message to the room. Returns the message content."
         return self._send(message, type_='PasteMessage')['message']
 
     def sound(self, message):
-        "Plays a sound into the room. Returns the message data."
+        "Plays a sound into the room. Returns the message content."
         return self._send(message, type_='SoundMessage')['message']
-    
+
+    def fetch_tweet(self, twitter_status_url):
+        "Fetches a tweet from a Twitter status URL. Returns the message content."
+        return self._send(twitter_status_url, type_='TweetMessage')['message']
+
     def update(self, name, topic):
         "Updates name and/or topic of the room."
         data = {'room': {'name': name, 'topic': topic}}
