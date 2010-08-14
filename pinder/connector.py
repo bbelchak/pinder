@@ -6,6 +6,7 @@ except ImportError:
     import simplejson as json
 
 from pinder.exc import HTTPUnauthorizedException, HTTPNotFoundException
+from pinder.multipart import encode_multipart, BOUNDARY
 
 
 class HTTPConnector(object):
@@ -24,8 +25,8 @@ class HTTPConnector(object):
     def get(self, path='', data=None, headers=None):
         return self._request('GET', path, data, headers)
 
-    def post(self, path, data=None, headers=None):
-        return self._request('POST', path, data, headers)
+    def post(self, path, data=None, headers=None, file_upload=False):
+        return self._request('POST', path, data, headers, file_upload)
 
     def put(self, path, data=None, headers=None):
         return self._request('PUT', path, data, headers)
@@ -33,13 +34,20 @@ class HTTPConnector(object):
     def _uri_for(self, path=''):
         return "%s/%s.json" % (urlparse.urlunparse(self.uri), path)
 
-    def _request(self, method, path, data=None, additional_headers=None):
+    def _request(self, method, path, data=None, additional_headers=None, file_upload=False):
         additional_headers = additional_headers or dict()
-        data = json.dumps(data or dict())
-
+        data = data or dict()
+        
         headers = {}
         headers['user-agent'] = self.user_agent
-        headers['content-type'] = 'application/json'
+
+        if method.upper() ==  'POST' and file_upload:
+            data = encode_multipart(BOUNDARY, data)
+            headers['content-type'] = 'multipart/form-data; boundary=%s' % BOUNDARY
+        else:
+            data = json.dumps(data)
+            headers['content-type'] = 'application/json'
+        
         headers['content-length'] = str(len(data))
         headers.update(additional_headers)
 

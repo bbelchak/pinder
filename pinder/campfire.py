@@ -39,7 +39,8 @@ class Campfire(object):
         rooms = self.rooms()
         for room in rooms:
             if room['name'] == name:
-                return Room(self, room['id'], data=room, connector=self._connector)
+                return Room(self, room['id'],
+                    data=room, connector=self._connector)
 
     def users(self, *rooms_ids):
         "Returns info about users in any room or in the given room(s)."

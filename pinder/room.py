@@ -30,8 +30,9 @@ class Room(object):
     def _get(self, path='', data=None, headers=None):
         return self._connector.get(self._path_for_room(path), data, headers)
 
-    def _post(self, path, data=None, headers=None):
-        return self._connector.post(self._path_for_room(path), data, headers)
+    def _post(self, path, data=None, headers=None, file_upload=False):
+        return self._connector.post(
+            self._path_for_room(path), data, headers, file_upload)
         
     def _put(self, path, data=None, headers=None):
         return self._connector.put(self._path_for_room(path), data, headers)
@@ -88,3 +89,8 @@ class Room(object):
         "Updates name and/or topic of the room."
         data = {'room': {'name': name, 'topic': topic}}
         self._put('', data)
+
+    def upload(self, fileobj):
+        "Uploads the content of the given file-like object to the room."
+        data = {'upload': fileobj}
+        self._post('uploads', data, file_upload=True)
