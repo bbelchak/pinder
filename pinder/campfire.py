@@ -2,7 +2,7 @@
 from pinder.connector import HTTPConnector
 from pinder.room import Room
 
-VERSION = "0.8b"
+VERSION = "0.8b2"
 
 
 class Campfire(object):

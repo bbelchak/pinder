@@ -8,5 +8,5 @@ from pinder.room import Room
 from pinder.exc import HTTPUnauthorizedException, HTTPNotFoundException
 
 __author__ = "Lawrence Oluyede <l.oluyede@gmail.com>"
-__copyright__ = "Copyright (c) 2009, Lawrence Oluyede"
+__copyright__ = "Copyright (c) 2009-2010, Lawrence Oluyede"
 __license__ = "BSD"
