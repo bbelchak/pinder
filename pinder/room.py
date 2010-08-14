@@ -104,3 +104,13 @@ class Room(object):
         "starting from since_message_id.")
         data = dict(limit=limit, since_message_id=since_message_id)
         return self._get('recent', data)['messages']
+
+    def highlight_message(self, message_id):
+        "Highlights a message."
+        path = 'messages/%s/star' % message_id
+        self._connector.post(path)
+
+    def remove_highlight_from_message(self, message_id):
+        "Removes a highlight from a message."
+        path = 'messages/%s/star' % message_id
+        self._connector.delete(path)

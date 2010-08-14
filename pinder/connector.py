@@ -31,6 +31,9 @@ class HTTPConnector(object):
     def put(self, path, data=None, headers=None):
         return self._request('PUT', path, data, headers)
 
+    def delete(self, path):
+        return self._request('DELETE', path)
+
     def _uri_for(self, path=''):
         return "%s/%s.json" % (urlparse.urlunparse(self.uri), path)
 
@@ -68,6 +71,6 @@ class HTTPConnector(object):
         try:
             return json.loads(body)
         except ValueError, e:
-            if response.status != 200:
-                raise Exception("Something did not work fine: %s - %s" % (
-                    str(e), body))
+            if response.status not in (200, 201):
+                raise Exception("Something did not work fine: HTTP %s - %s - %s" % (
+                    response.status, str(e), body))
