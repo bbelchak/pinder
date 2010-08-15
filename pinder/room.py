@@ -1,12 +1,9 @@
 "Room object"
 import datetime
 
-from pinder.connector import HTTPConnector
-
 class Room(object):
-    def __init__(self, campfire, room_id, data, connector=HTTPConnector):
+    def __init__(self, campfire, room_id, data, connector):
         self._campfire = campfire
-        connector = connector or HTTPConnector
         self._connector = connector
         # The id of the room
         self.id = room_id
@@ -114,3 +111,12 @@ class Room(object):
         "Removes a highlight from a message."
         path = 'messages/%s/star' % message_id
         self._connector.delete(path)
+
+    def listen(self, callback, errback):
+        ("Listens on room conversation calling the callback on each message. "
+        "The errback will be called upon networking problems, parsing errors "
+        "and on shutdown. The callback's argument is the message. "
+        "The errback's is the exception.")
+        from pinder import streaming
+        username, password = self._connector.get_credentials()
+        streaming.start(username, password, self.id, callback, errback)

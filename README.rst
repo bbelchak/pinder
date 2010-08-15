@@ -13,6 +13,7 @@ Requirements
 
 * `httplib2 <http://code.google.com/p/httplib2/>`_ >= 0.5.0
 * `simplejson <http://code.google.com/p/simplejson/>`_ (or the json module in Python 2.6)
+* `Twisted Matrix <http://twistedmatrix.com>`_ >= 9.0 (only for streaming support)
  
 Documentation
 -------------

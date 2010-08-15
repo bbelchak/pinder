@@ -2,9 +2,9 @@ from distribute_setup import use_setuptools
 use_setuptools()
 from setuptools import setup
 
-VERSION = "0.8b2"
-requirements = ['httplib2']
+VERSION = '1.0b'
 
+requirements = ['httplib2']
 # if Python < 2.6 add simplejson to required packages
 import platform
 major, minor, build = platform.python_version_tuple()

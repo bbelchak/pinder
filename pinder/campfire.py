@@ -1,9 +1,10 @@
 "Campfire client"
 from pinder.connector import HTTPConnector
+from pinder.exc import RoomNotFoundException
 from pinder.room import Room
 
-VERSION = "0.8b2"
-
+VERSION = "1.0b"
+USER_AGENT = "Pinder/%s" % VERSION
 
 class Campfire(object):
     """Initialize a Campfire client with the given subdomain and token.
@@ -14,7 +15,7 @@ class Campfire(object):
         self._token = token
         connector = connector or HTTPConnector
         self._connector = connector(
-            subdomain, token, ssl, ua="Pinder/%s" % VERSION)
+            subdomain, token, ssl, ua=USER_AGENT)
         # The URI object of the Campfire account.
         self.uri = self._connector.uri
 
@@ -34,8 +35,10 @@ class Campfire(object):
         
     def room(self, room_id):
         "Returns the room info for the room with the given id."
-        data = self._connector.get("room/%s" % room_id)['room']
-        return Room(self, room_id, data, connector=self._connector)
+        data = self._connector.get("room/%s" % room_id)
+        if not data:
+            raise RoomNotFoundException("The room %s does not exist." % room_id)
+        return Room(self, room_id, data['room'], connector=self._connector)
 
     def find_room_by_name(self, name):
         """Finds a Campfire room with the given name.

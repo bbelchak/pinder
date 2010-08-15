@@ -33,6 +33,11 @@ class HTTPConnector(object):
 
     def delete(self, path):
         return self._request('DELETE', path)
+        
+    def get_credentials(self):
+        credentials = list(self._http.credentials.iter(''))
+        if credentials:
+            return credentials[0]
 
     def _uri_for(self, path=''):
         return "%s/%s.json" % (urlparse.urlunparse(self.uri), path)
