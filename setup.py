@@ -21,7 +21,7 @@ setup(
     url='http://github.com/pinder',
     packages=['pinder'],
     package_data = {
-        '': ['CHANGELOG', 'LICENSE', 'README', 'TODO'],
+        '': ['*.txt', '*.rst']
     },
     classifiers=[
         'Development Status :: 4 - Beta',
