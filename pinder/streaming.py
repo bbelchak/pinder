@@ -46,7 +46,7 @@ class StreamingParser(basic.LineReceiver):
             d.addErrback(self.user_errback)
             d.errback(DefaultException(reason.getErrorMessage()))
 
-def start(username, password, room_id, callback, errback):
+def start(username, password, room_id, callback, errback, start_reactor=False):
     auth_header = 'Basic ' + base64.b64encode("%s:%s" % (username, password)).strip()
     url = 'https://streaming.campfirenow.com/room/%s/live.json' % room_id
     headers = Headers({
@@ -58,4 +58,5 @@ def start(username, password, room_id, callback, errback):
     d = agent.request('GET', url, headers, None)
     d.addCallback(_get_response, callback, errback)
     d.addBoth(_shutdown, errback)
-    reactor.run()
+    if start_reactor:
+      reactor.run()
