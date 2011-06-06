@@ -11,7 +11,7 @@ from pinder.multipart import encode_multipart, BOUNDARY
 
 class HTTPConnector(object):
     """Makes the actual connection to the server and handles the response"""
-    def __init__(self, subdomain, token, ssl=False, ua=''):
+    def __init__(self, subdomain, token, ssl=True, ua=''):
         # The User agent of the client
         self.user_agent = ua
         schema = ('http', 'https')[ssl==True]

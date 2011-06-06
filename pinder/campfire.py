@@ -7,9 +7,8 @@ VERSION = "1.0b"
 USER_AGENT = "Pinder/%s" % VERSION
 
 class Campfire(object):
-    """Initialize a Campfire client with the given subdomain and token.
-     Accepts a third boolean parameter to enable SSL (defaults to false)."""
-    def __init__(self, subdomain, token, ssl=False, connector=HTTPConnector):
+    """Initialize a Campfire client with the given subdomain and token."""
+    def __init__(self, subdomain, token, ssl=True, connector=HTTPConnector):
         # The Campfire's subdomain.
         self.subdomain = subdomain
         self._token = token
