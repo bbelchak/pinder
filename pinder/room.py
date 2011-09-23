@@ -115,11 +115,11 @@ class Room(object):
         path = 'messages/%s/star' % message_id
         self._connector.delete(path)
 
-    def listen(self, callback, errback):
+    def listen(self, callback, errback, start_reactor=True):
         ("Listens on room conversation calling the callback on each message. "
         "The errback will be called upon networking problems, parsing errors "
         "and on shutdown. The callback's argument is the message. "
-        "The errback's is the exception.")
+        "The errback's is the exception. start_reactor as True starts Twisted's reactor")
         from pinder import streaming
         username, password = self._connector.get_credentials()
-        streaming.start(username, password, self.id, callback, errback)
+        streaming.start(username, password, self.id, callback, errback, start_reactor)
