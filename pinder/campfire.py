@@ -3,7 +3,7 @@ from pinder.connector import HTTPConnector
 from pinder.exc import RoomNotFoundException
 from pinder.room import Room
 
-VERSION = "1.0b"
+VERSION = "1.0b2"
 USER_AGENT = "Pinder/%s" % VERSION
 
 class Campfire(object):
@@ -19,9 +19,9 @@ class Campfire(object):
         self.uri = self._connector.uri
 
     def rooms(self):
-        "Returns the rooms available in the Campfire account"
+        "Returns the rooms available to the Campfire account"
         return self._connector.get('rooms')['rooms']
-
+    
     def joined_rooms(self):
         "Returns the rooms you've joined"
         return self._connector.get('presence')['rooms']
@@ -70,3 +70,7 @@ class Campfire(object):
     def search(self, term):
         "Returns all the messages containing the given term."
         return self._connector.get("search/%s" % term)['messages']
+        
+    def account(self):
+        "Returns info about current accout"
+        return self._connector.get("account")['account']

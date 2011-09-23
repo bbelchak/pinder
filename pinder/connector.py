@@ -21,6 +21,7 @@ class HTTPConnector(object):
         self._http = httplib2.Http(timeout=5)
         self._http.force_exception_to_status_code = True
         self._http.add_credentials(token, 'X')
+        self.response = None
 
     def get(self, path='', data=None, headers=None):
         return self._request('GET', path, data, headers)
@@ -64,18 +65,18 @@ class HTTPConnector(object):
         else:
             raise Exception('Unsupported HTTP method: %s' % method)
 
-        response, body = self._http.request(location, method, data, headers)
+        self.response, body = self._http.request(location, method, data, headers)
 
-        if response.status == 401:
+        if self.response.status == 401:
             raise HTTPUnauthorizedException(
                 "You are not authorized to access the resource: '%s'" % path)
-        elif response.status == 404:
+        elif self.response.status == 404:
             raise HTTPNotFoundException(
                 "The resource you are looking for does not exist (%s)" % path)
 
         try:
             return json.loads(body)
         except ValueError, e:
-            if response.status not in (200, 201):
+            if self.response.status not in (200, 201):
                 raise Exception("Something did not work fine: HTTP %s - %s - %s" % (
-                    response.status, str(e), body))
+                    self.response.status, str(e), body))
