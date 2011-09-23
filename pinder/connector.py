@@ -23,11 +23,11 @@ class HTTPConnector(object):
         self._http.add_credentials(token, 'X')
         self.response = None
 
-    def get(self, path='', data=None, headers=None):
-        return self._request('GET', path, data, headers)
+    def get(self, path='', data=None, headers=None, parse_body=True):
+        return self._request('GET', path, data, headers, parse_body=parse_body)
 
     def post(self, path, data=None, headers=None, file_upload=False):
-        return self._request('POST', path, data, headers, file_upload)
+        return self._request('POST', path, data, headers, file_upload=file_upload)
 
     def put(self, path, data=None, headers=None):
         return self._request('PUT', path, data, headers)
@@ -43,7 +43,7 @@ class HTTPConnector(object):
     def _uri_for(self, path=''):
         return "%s/%s.json" % (urlparse.urlunparse(self.uri), path)
 
-    def _request(self, method, path, data=None, additional_headers=None, file_upload=False):
+    def _request(self, method, path, data=None, additional_headers=None, file_upload=False, parse_body=True):
         additional_headers = additional_headers or dict()
         data = data or dict()
         
@@ -74,9 +74,12 @@ class HTTPConnector(object):
             raise HTTPNotFoundException(
                 "The resource you are looking for does not exist (%s)" % path)
 
-        try:
-            return json.loads(body)
-        except ValueError, e:
-            if self.response.status not in (200, 201):
-                raise Exception("Something did not work fine: HTTP %s - %s - %s" % (
-                    self.response.status, str(e), body))
+        if parse_body:
+            try:
+                return json.loads(body)
+            except ValueError, e:
+                if self.response.status not in (200, 201):
+                    raise Exception("Something did not work fine: HTTP %s - %s - %s" % (
+                        self.response.status, str(e), body))
+        return body
+

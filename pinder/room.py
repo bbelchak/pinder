@@ -24,12 +24,12 @@ class Room(object):
             uri = '%s/%s' % (uri, path)
         return uri
  
-    def _get(self, path='', data=None, headers=None):
-        return self._connector.get(self._path_for_room(path), data, headers)
+    def _get(self, path='', data=None, headers=None, parse_body=True):
+        return self._connector.get(self._path_for_room(path), data, headers, parse_body=parse_body)
 
     def _post(self, path, data=None, headers=None, file_upload=False):
         return self._connector.post(
-            self._path_for_room(path), data, headers, file_upload)
+            self._path_for_room(path), data, headers, file_upload=file_upload)
         
     def _put(self, path, data=None, headers=None):
         return self._connector.put(self._path_for_room(path), data, headers)
@@ -95,6 +95,9 @@ class Room(object):
         "Uploads the content of the given file-like object to the room."
         data = {'upload': fileobj}
         return self._post('uploads', data, file_upload=True)['upload']
+        
+    def get_upload(self, upload_id):
+        return self._get("uploads/%s/upload" % upload_id, parse_body=False)
 
     def recent_messages(self, limit=100, since_message_id=None):
         ("Returns upto limit (max 100) messages optionally "
